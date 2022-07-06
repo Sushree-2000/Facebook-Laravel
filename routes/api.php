@@ -31,10 +31,13 @@ Route::middleware('auth:api')->get('getUsers/{id?}',[ApiController::class,'getUs
 Route::middleware('auth:api')->get('getAbouts/{id?}',[ApiController::class,'getAbouts']);
 Route::middleware('auth:api')->get('searchUser/{email}',[ApiController::class,'searchUser']);
 Route::middleware('auth:api')->get('searchPost/{user_id}',[ApiController::class,'searchPost']);
-Route::middleware('auth:api')->get('searchAbout/{email}',[ApiController::class,'searchAbout']);
+Route::middleware('auth:api')->get('searchAbout/{user_id}',[ApiController::class,'searchAbout']);
 Route::middleware('auth:api')->put('updateUser',[ApiController::class,'updateUser']);
-Route::middleware('auth:api')->put('updatePost',[ApiController::class,'updatePost']);
-Route::middleware('auth:api')->put('updateAbout',[ApiController::class,'updateAbout']);
+Route::middleware('auth:api')->post('updatePost/{id}',[ApiController::class,'updatePost']);
+// Route::middleware('auth:api')->put('updatePost/{id}',[ApiController::class,'updatePost']);
+// Route::middleware('auth:api')->put('updatePost',[ApiController::class,'updatePost']);
+Route::middleware('auth:api')->put('updateAbout/{id}',[ApiController::class,'updateAbout']);
+// Route::middleware('auth:api')->post('updateAbout/{id}',[ApiController::class,'updateAbout']);
 Route::middleware('auth:api')->delete('deletePost/{id}',[ApiController::class,'deletePost']);
 Route::middleware('auth:api')->delete('deleteAbout/{email}',[ApiController::class,'deleteAbout']);
 // To get logout from the token
@@ -60,6 +63,7 @@ Route::middleware('auth:api')->post('logoutUser',[ApiController::class,'logoutUs
 Route::post('addUser',[ApiController::class,'addUser']);
 Route::post('loginUser',[ApiController::class,'loginUser']);
 // Route::post('addAbout',[ApiController::class,'addAbout']);
+// Route::post('addPost',[ApiController::class,'addPost']);
 
 //TO EDIT/UPDATE DATAS
 // Route::put('updateUser',[ApiController::class,'updateUser']);

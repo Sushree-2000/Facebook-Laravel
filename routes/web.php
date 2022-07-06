@@ -7,8 +7,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\AboutController;
 
 //
-// use App\Http\Controllers\HomeController;
-use App\Http\Controllers\VueController;
+use App\Http\Controllers\HomeController;
+// use App\Http\Controllers\VueController;
 
 
 /*
@@ -67,11 +67,13 @@ Route::get('dislike/{id}', [PostController::class, 'dislike']);
 
 
 //////
-Auth::routes();
+// Auth::routes();
 
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/new', [VueController::class, 'api']);
+// Route::get('/new', [VueController::class, 'api']);
+
+
 Route::any('{slug}', function(){
     return redirect('home');
 });

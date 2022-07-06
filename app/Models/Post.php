@@ -10,7 +10,7 @@ class Post extends Model
     use HasFactory;
     protected $table = 'posts';  //To connect with the table in database"Here 'employee' is the table name"
     protected $primaryKey = 'id';
-    protected $fillable = ['textpost', 'imagepost', 'user_id','likes','dislikes'];
+    protected $fillable = ['textpost', 'imagepost', 'user_id', 'email', 'likes','dislikes'];
 
     //Tell laravel to fetch text values and set them as arrays
     // protected $casts = [

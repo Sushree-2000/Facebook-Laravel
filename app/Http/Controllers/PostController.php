@@ -70,10 +70,6 @@ class PostController extends ValidController
             $req->imagepost->move(public_path('postedImg'),time().'.'.$req->imagepost->extension());
         }
 
-        // $post->imagepost = $req->imagepost;
-        // if($req->imagepost){
-        //     $req->imagepost->store('PostedImg');
-        // }
         $data = array();
         if(session()->has('LoggedUser')){
             $data = User::where('id','=',session()->get('LoggedUser'))->first();
@@ -124,11 +120,13 @@ class PostController extends ValidController
     public function updatepost(Request $req,$id){
         //
         $post = Post::find($id);
-        // $input = $request->all();
+        // $input = $req->all();
         // $post->update($input);
         $post->textpost = $req->textpost;
-        // $post->imagepost = time().'.'.$req->imagepost->extension();
-        $post->imagepost = $req->imagepost;
+        if($req->imagepost){
+            $post->imagepost = time().'.'.$req->imagepost->extension();
+            $req->imagepost->move(public_path('postedImg'),time().'.'.$req->imagepost->extension());
+        }
         $post->save();
         return redirect('profile')->with('flash_message', 'Post Updated!');
     }

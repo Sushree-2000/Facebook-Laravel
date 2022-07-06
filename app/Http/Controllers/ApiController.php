@@ -43,8 +43,8 @@ class ApiController extends Controller
 
     }
     //Search in About
-    function searchAbout($email){
-        return About::where('email','like','%'.$email.'%')->get(); //Character search
+    function searchAbout($user_id){
+        return About::where('user_id','like','%'.$user_id.'%')->get(); //Character search
 
     }
 
@@ -92,7 +92,7 @@ class ApiController extends Controller
             $user = Auth::user();
             $token = $user->createToken('API Token')->accessToken;
 
-            return response([ 'user' => $user->email, 'token' => $token]);
+            return response([ 'user' => $user->email, 'userId' => $user->id, 'token' => $token]);
         }
         else{
             return response()->json(['error'=>'Unauthorized Access'],202);
@@ -119,8 +119,17 @@ class ApiController extends Controller
             $post->imagepost = time().'.'.$req->imagepost->extension();
             $req->imagepost->move(public_path('postedImg'),time().'.'.$req->imagepost->extension());
         }
-        $user = Auth::user();
-        $post->user_id = $user->id;
+
+        // if (Auth::check()){
+        //     $user = Auth::user();
+        //     $post->user_id = $user->id;
+        // }
+
+        // $user = Auth::user();
+        // $post->user_id = $user->id;
+
+        $post->user_id = Auth::user()->id;
+        $post->email = Auth::user()->email;
 
         $query = $post->save();
         return $post;
@@ -168,35 +177,86 @@ class ApiController extends Controller
         }
     }
     //Update Post
-    function updatePost(Request $req){
-        $post = Post::find($req->id);
+    // function updatePost(Request $req){
+    //     $post = Post::find($req->id);
+    function updatePost(Request $req,$id){
+        $post = Post::find($id);
         $loggedUser = Auth::user();
         if($loggedUser->id == $post->user_id){
-            $input = $req->all();
-            $post->update($input);
+            // $input = $req->all();
+            // $post->update($input);
+            $post->textpost = $req->textpost;
+            if($req->imagepost){
+                $post->imagepost = time().'.'.$req->imagepost->extension();
+                $req->imagepost->move(public_path('postedImg'),time().'.'.$req->imagepost->extension());
+            }
+            $post->save();
             return [$post,'Your posts have been updated successfully'];
         }
         else{
             return [$loggedUser->email,"Sorry!!You can't edit another one's post"];
         }
 
-        $input = $req->all();
-        $post->update($input);
-        return $post;
+        // $input = $req->all();
+        // $post->update($input);
+        // return $post;
     }
-    //Update About
-    function updateAbout(Request $req){
-        $about = About::find($req->id);
+
+    // Update About
+    function updateAbout(Request $req, $id){
+        // $about = About::find($req->id);
+        $about = About::find($id);
+
         $loggedUser = Auth::user();
         if($loggedUser->id == $about->user_id){
-            $input = $req->all();
-            $about->update($input);
+            // $input = $req->all();
+            // $about->update($input);
+
+            // $about->fullname = $req->fullname;
+            $req->fullname ? $about->fullname = $req->fullname : $about->fullname = $about->fullname;
+            $req->email ? $about->email = $req->email : $about->email = $about->email;
+            $req->number ? $about->number = $req->number : $about->number = $about->number;
+            $req->dob ? $about->dob = $req->dob : $about->dob = $about->dob;
+            $req->gender ? $about->gender = $req->gender : $about->gender = $about->gender;
+            $req->address ? $about->address = $req->address : $about->address = $about->address;
+            $req->work ? $about->work = $req->work : $about->work = $about->work;
+            $req->education ? $about->education = $req->education : $about->education = $about->education;
+            $req->college ? $about->college = $req->college : $about->college = $about->college;
+            $req->passout ? $about->passout = $req->passout : $about->passout = $about->passout;
+
+            $about->save();
+
             return [$about,'Your details have been updated successfully'];
         }
         else{
             return [$loggedUser->email,"Sorry!!You can't edit another one's details"];
         }
     }
+
+    // function updateAbout(Request $req, $id){
+    //     $about = About::find($id);
+    //     $loggedUser = Auth::user();
+    //     if($loggedUser->id == $about->user_id){
+    //         $about->fullname = $req->fullname;
+    //         $about->email = $req->email;
+    //         $about->number = $req->number;
+    //         $about->dob = $req->dob;
+    //         $about->gender = $req->gender;
+    //         $about->address = $req->address;
+    //         $about->work = $req->work;
+    //         $about->education = $req->education;
+    //         $about->college = $req->college;
+    //         $about->passout = $req->passout;
+
+    //         // $about->user_id = $user->id;
+
+    //         $about->save();
+    //         return [$about,'Your details have been updated successfully'];
+    //     }
+    //     else{
+    //         return [$loggedUser->email,"Sorry!!You can't edit another one's details"];
+    //     }
+    // }
 
     //DELETE DATAS
     //Delete Post
